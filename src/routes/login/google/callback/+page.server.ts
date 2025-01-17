@@ -1,7 +1,6 @@
 import { eq } from "drizzle-orm";
 import {drizzle, DrizzleD1Database} from "drizzle-orm/d1";
-import * as schema from "../../../../db/schema";
-import { type RequestEvent, redirect } from "@sveltejs/kit";
+import * as schema from "$db/schema";
 import { generateIdFromEntropySize, Lucia, type User } from "lucia";
 import { initiateLucia, initiateGoogleAuthClient, type DatabaseUserAttributes } from "$lib/server/auth";
 

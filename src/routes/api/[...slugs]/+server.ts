@@ -2,13 +2,14 @@ import { Elysia } from "elysia";
 import type { Context } from "elysia";
 import { swagger } from '@elysiajs/swagger'
 import { initiateLucia } from "$lib/server/auth";
+import purshaseEndpoint from "./purshase";
 
 interface CF extends Context {
     platform: App.Platform;
     locals: App.Locals;
 }
 
-const app = new Elysia({ aot: false, prefix: "/api" }).use(swagger());
+const app = new Elysia({ aot: false, prefix: "/api" }).use(purshaseEndpoint).use(swagger());
 
 app.post("/logout", async (c:CF) => {
     if (!c.locals.session) {

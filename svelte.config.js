@@ -1,6 +1,5 @@
 import adapter from '@sveltejs/adapter-cloudflare';
 import { vitePreprocess } from '@sveltejs/vite-plugin-svelte';
-import path from 'path';
 
 /** @type {import('@sveltejs/kit').Config} */
 const config = {
@@ -15,13 +14,12 @@ const config = {
 		adapter: adapter(),
 		version: {
 			pollInterval: 1000,
+		},
+		alias: {
+			$components: './src/components',
+			$db: './src/db'
 		}
-	},
-
-	paths: query => {
-		$db: './src/db'
-	},
-	
+	}	
 };
 
 export default config;

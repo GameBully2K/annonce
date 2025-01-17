@@ -5,7 +5,7 @@
 
 /* vintage theme */
 @font-face {
-	font-family: 'Abril Fatface';
-	src: url('/fonts/AbrilFatface.ttf');
+	font-family: 'Inter';
+	src: url('/fonts/Inter-VariableFont_opsz,wght.ttf');
 	font-display: swap;
 }

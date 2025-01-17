@@ -1,39 +1,65 @@
 <script lang="ts">
-	import { page } from '$app/stores'
-	import { enhance } from '$app/forms';
+    import { page } from '$app/stores';
+    import LandingPage from '$components/LandingPage.svelte';
+    import Dashboard from '$components/dashboard/Dashboard.svelte';
 	import type { ActionData } from './$types';
+    import { getToastStore, getDrawerStore } from '@skeletonlabs/skeleton';
+    import type { ToastSettings } from '@skeletonlabs/skeleton';
+
+    const drawerStore = getDrawerStore();
+    const toastStore = getToastStore();
+
+    interface Draft {
+		id: string;
+		userId: string;
+		title: string;
+		companyType: string;
+		publicationType: string;
+		body: string;
+		createdAt: number;
+		updatedAt: number;
+	}
 
 	export let form: ActionData;
+    let toBeEditedDraft: Draft | null = null;
 
-	async function logout() {
-		const res = await fetch('/api/logout', { method: 'POST' })
-		if (res.ok) {
-			location.href = '/login';
-		} else {
-			console.error('Logout failed');
-		}
-	}
-			
+    $: if (form?.draft) {
+        toBeEditedDraft = form.draft as Draft;
+        console.log(toBeEditedDraft);
+    }
 
+    $: if (form?.message == "Achat enregistré") {
+        drawerStore.close();
+    }
+
+    $: if (form?.message) {
+        const t: ToastSettings = {
+            message: form.message ?? "All Good",
+            autohide: true,
+            hideDismiss: false,
+            background: form?.Success ? 'variant-filled-success' : 'variant-filled-error'
+        };
+        if (form.message.includes("Reload")) {
+            t.action = {
+                label: "Reload",
+                response: ()=>{location.reload()}
+            }
+        }
+        toastStore.trigger(t);}
+    // Mock data - replace with actual data from your backend
 </script>
 
 <main>
-	<div class="flex p-6 justify-between">
-		<h2 class="h2 font-semibold">Hello, <b>{$page.data.firstName ?? $page.data.username ?? "Not Set"}</b></h2>
-		<button type="button" class="btn variant-filled w-1/4 md:w-[8em] " on:click={logout}>
-			logout
-		</button>
-	</div>
-	
-	{#if ($page.data.username)}
-		<form class="flex flex-col gap-4 p-4 md:w-1/4 " method="POST" use:enhance>
-			<h2 class="h2">Change Info</h2>
-			<input class="input p-2" type="text" name="username" id="username" value={$page.data.username}/>
-			<input class="input p-2" type="text" name="firstName" id="firstName" value={$page.data.firstName}/>
-			<input class="input p-2" type="text" name="lastName" id="lastName" value={$page.data.lastName}/>
-			<input class="input p-2" type="text" name="email" id="email" value={$page.data.email}/>
-			<button class="btn variant-filled" type="submit">Update</button>
-			<p>{form?.message ?? ''}</p>
-		</form>
-	{/if}
+    {#if $page.data.username}
+        <Dashboard 
+            credits={$page.data.credits}    
+            recentPublications={$page.data.publications}
+            draftPublications={$page.data.drafts}
+            pendingPurchase={$page.data.pendingPurchase}
+            stats={$page.data.stats}
+            toBeEditedDraft={toBeEditedDraft}
+        />
+    {:else}
+        <LandingPage/>
+    {/if}
 </main>
