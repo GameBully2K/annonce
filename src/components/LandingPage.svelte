@@ -438,10 +438,11 @@
                                 </div>
                                 <div>
                                     <div class="font-medium">Adresse</div>
+                                    <p>App8, Bd Tah, Casablanca 20250</p>
                                     <a href="https://maps.app.goo.gl/ARPC6VSTidqLWAnB7?g_st=aw" 
                                        target="_blank" 
                                        rel="noopener noreferrer" 
-                                       class="hover:text-[#4E9C97] transition-colors">
+                                       class="text-white underline">
                                         Ouvrir dans Google Maps
                                     </a>
                                 </div>
@@ -454,13 +455,14 @@
 
                         <!-- Map Embed -->
                         <div class="rounded-xl overflow-hidden shadow-lg h-[400px]">
-                            <iframe
-                                src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d819.8806269168551!2d-7.581976!3d33.5332442!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0xda6331e871106af%3A0x49301211d672e403!2s1000%20annonces-%20let%E2%80%99s%20go%20branding!5e0!3m2!1sen!2sma!4v1705505177315!5m2!1sen!2sma"
-                                width="100%"
-                                height="100%"
-                                style="border:0;"
-                                loading="lazy"
-                            referrerpolicy="no-referrer-when-cross-origin"
+                        <iframe
+                            title="1000 Annonces Office Location Map"
+                            src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d819.8806269168551!2d-7.581976!3d33.5332442!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0xda6331e871106af%3A0x49301211d672e403!2s1000%20annonces-%20let%E2%80%99s%20go%20branding!5e0!3m2!1sen!2sma!4v1705505177315!5m2!1sen!2sma"
+                            width="100%"
+                            height="100%"
+                            style="border:0;"
+                            loading="lazy"
+                            referrerpolicy="strict-origin-when-cross-origin"
                         ></iframe>
                     </div>
                 </div>
