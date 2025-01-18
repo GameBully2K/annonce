@@ -194,7 +194,7 @@ export const actions = {
         }
 
         const updateCredits = await db.update(schema.userTable).set({
-            credits: parseInt(event.locals.user.credits) + (pur.totalAmount || 0)
+            credits: parseInt(event.locals.user.credits) + (pur.quantity || 0)
         }).where(eq(schema.userTable.id, pur.userId))
 
         if (!updateCredits.success) {
