@@ -142,8 +142,8 @@
             <div class="flex items-center justify-between py-4 px-6">
                 <!-- Logo -->
                 <a href="/" class="flex items-center space-x-2 w-[120px] md:w-[15%]">
-                    <img 
-                        src="https://hebbkx1anhila5yf.public.blob.vercel-storage.com/logo-evXVa4WwELuk1oCgJncfxiTHkZYEmk.png" 
+                    <img
+                        src="/logo.webp"
                         alt="1000 Annonces" 
                         class="h-auto w-full transform hover:scale-105 transition-transform duration-300"
                     />
@@ -204,7 +204,7 @@
     <section class="relative pt-36 min-h-screen flex items-center pt-16">
         <div class="absolute inset-0 z-0">
             <img
-                src="/heroBg.jpg"
+                src="/heroBg.webp"
                 alt="Hero Background" 
                 class="w-full h-full object-cover"
             />
