@@ -128,20 +128,24 @@
         executeRecaptcha();
     });
 
-
+    let showVideoModal = false;
+    
+    function toggleVideoModal() {
+        showVideoModal = !showVideoModal;
+    }
 </script>
 
 <div class="landing-page">
     <!-- Header -->
-    <header class="fixed top-0 w-full bg-white/95 backdrop-blur-sm z-50 transition-all duration-300">
+    <header class="fixed top:10 md:top-11 w-full bg-white/95 backdrop-blur-sm z-50 transition-all duration-300">
         <div class="container mx-auto">
             <div class="flex items-center justify-between py-4 px-6">
                 <!-- Logo -->
-                <a href="/" class="flex items-center space-x-2 pl-4 w-[15%]">
+                <a href="/" class="flex items-center space-x-2 w-[120px] md:w-[15%]">
                     <img 
                         src="https://hebbkx1anhila5yf.public.blob.vercel-storage.com/logo-evXVa4WwELuk1oCgJncfxiTHkZYEmk.png" 
                         alt="1000 Annonces" 
-                        class="h-10 w-full h-auto transform hover:scale-105 transition-transform duration-300"
+                        class="h-auto w-full transform hover:scale-105 transition-transform duration-300"
                     />
                 </a>
 
@@ -197,10 +201,10 @@
     </header>
 
     <!-- Hero Section -->
-    <section class="relative min-h-screen flex items-center pt-16">
+    <section class="relative pt-36 min-h-screen flex items-center pt-16">
         <div class="absolute inset-0 z-0">
-            <img 
-                src="https://hebbkx1anhila5yf.public.blob.vercel-storage.com/hero%20image.jpg-L4oOQ1tOJV0VNX5BWdquqxvDFEdcP4.jpeg" 
+            <img
+                src="/heroBg.jpg"
                 alt="Hero Background" 
                 class="w-full h-full object-cover"
             />
@@ -255,9 +259,48 @@
                         </div>
                     </div>
                 </div>
+
+                <!-- Mobile Video Button -->
+                <button
+                    class="lg:hidden bg-white/10 backdrop-blur-md text-white px-6 py-3 rounded-full flex items-center justify-center gap-2"
+                    on:click={toggleVideoModal}
+                >
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z" />
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                    </svg>
+                    Regarder la vidéo
+                </button>
             </div>
         </div>
     </section>
+
+    <!-- Add Video Modal -->
+    {#if showVideoModal}
+        <div class="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 flex items-center justify-center p-4">
+            <div class="bg-black rounded-lg w-full max-w-3xl relative">
+                <button 
+                    on:click={toggleVideoModal}
+                    class="absolute -top-10 right-0 text-white hover:text-gray-300"
+                >
+                    <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                    </svg>
+                </button>
+                
+                <div class="relative w-full aspect-video">
+                    <iframe 
+                        class="absolute top-0 left-0 w-full h-full rounded-lg"
+                        src="https://www.youtube-nocookie.com/embed/mgLOQktP_-c?si=KYFVDhyAJhdwUeEB&controls=1" 
+                        title="YouTube video player" 
+                        frameborder="0" 
+                        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" 
+                        allowfullscreen
+                    ></iframe>
+                </div>
+            </div>
+        </div>
+    {/if}
 
     <!-- Popular Forms Section -->
     <section id="services" class="py-24 bg-white">
