@@ -16,3 +16,5 @@ interface Publication {
 }
 
 export const selectedPublicationStore = writable<Publication | null>(null);
+
+export const newPublicationStateStore = writable(false);

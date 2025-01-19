@@ -94,8 +94,6 @@ export const actions = {
 		const pubId = formData.get('pubId')?.toString() || "";
 		const pubType = formData.get('pubType')?.toString() || "";
 
-		console.log(formData.get('pubId')?.toString(), formData.get('pubType')?.toString());
-
 		console.log(pubId, pubType);
 
 		if (!pubId || !pubType) {

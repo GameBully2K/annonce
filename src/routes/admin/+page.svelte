@@ -6,7 +6,7 @@
     import type { ToastSettings } from '@skeletonlabs/skeleton';
     import PublicationCard from '$components/dashboard/PublicationCard.svelte';
     import { getDrawerStore } from '@skeletonlabs/skeleton';
-    
+    import { Tab, TabGroup } from '@skeletonlabs/skeleton';
     
     export let form: ActionData;
     const toastStore = getToastStore();
@@ -32,6 +32,7 @@
         toastStore.trigger(t);
     }
 
+    let tabSet = 0;
 </script>
 
 <div class="container mx-auto p-4 space-y-8">
@@ -74,74 +75,155 @@
 
     <!-- Tab List -->
     <div class="card variant-glass-surface">
-        <!-- Tab Content -->
-        <div class="grid {$page.data.role == "admin" ? "grid-cols-3" : "grid-cols-2"} p-4 w-full">
-                <div class="space-y-4">
-                    <h3 class="h2 w-full text-center">Publications</h3>
-                    {#if $page.data.unverifiedPubs.length == 0}
-                        <p class="text-center opacity-50">No Publications</p>
-                    {/if}
-                    {#each $page.data.unverifiedPubs as pub}
-                        <PublicationCard 
-                            pub={pub}
-                            isAdmin={true}
-                        />
-                    {/each}
-                </div>
-                <!-- Purchases verification UI here -->
-                <div class="space-y-4">
-                    <h3 class="h2 w-full text-center">Purchases</h3>
-                    {#if $page.data.unverifiedPurshases.length == 0}
-                        <p class="text-center opacity-50">No Purchases</p>
-                    {/if}
-                    {#each $page.data.unverifiedPurshases as purchase}
-                        <div class="card p-4 variant-glass-surface">
-                            <div class="flex justify-between items-center">
-                                <div>
-                                    <p class="font-bold">{purchase.quantity} Credits</p>
-                                    <p class="text-sm opacity-75">Total: {purchase.totalAmount}DH</p>
-                                    <p class="text-xs opacity-50">RIB: {purchase.accountNumber}</p>
-                                </div>
-                                <div class="flex gap-2">
-                                    <form method="POST" action="?/acceptPur" use:enhance>
-                                        <input type="hidden" name="id" value={purchase.id}>
-                                        <button class="btn variant-filled-success">Accept</button>
-                                    </form>
-                                    <form method="POST" action="?/rejectPur" use:enhance>
-                                        <input type="hidden" name="id" value={purchase.id}>
-                                        <button class="btn variant-filled-error">Reject</button>
-                                    </form>
-                                </div>
-                            </div>
-                        </div>
-                    {/each}
-                </div>
+        <!-- Mobile Tabs -->
+        <div class="md:hidden">
+            <TabGroup>
+                <Tab bind:group={tabSet} name="tab1" value={0}>Publications</Tab>
+                <Tab bind:group={tabSet} name="tab2" value={1}>Purchases</Tab>
                 {#if $page.data.role == "admin"}
-                    <div class="space-y-4">
-                        <h3 class="h2 w-full text-center">Agents</h3>
-                        {#if $page.data.agents.length > 0}
-                            {#each $page.data.agents as user}
+                    <Tab bind:group={tabSet} name="tab3" value={2}>Agents</Tab>
+                {/if}
+                
+                <!-- Tab Panels -->
+                <svelte:fragment slot="panel">
+                    {#if tabSet === 0}
+                        <div class="space-y-4 p-4">
+                            <h3 class="h2 w-full text-center">Publications</h3>
+                            {#if $page.data.unverifiedPubs.length == 0}
+                                <p class="text-center opacity-50">No Publications</p>
+                            {/if}
+                            {#each $page.data.unverifiedPubs as pub}
+                                <PublicationCard 
+                                    pub={pub}
+                                    isAdmin={true}
+                                />
+                            {/each}
+                        </div>
+                    {:else if tabSet === 1}
+                        <div class="space-y-4 p-4">
+                            <h3 class="h2 w-full text-center">Purchases</h3>
+                            {#if $page.data.unverifiedPurshases.length == 0}
+                                <p class="text-center opacity-50">No Purchases</p>
+                            {/if}
+                            {#each $page.data.unverifiedPurshases as purchase}
                                 <div class="card p-4 variant-glass-surface">
                                     <div class="flex justify-between items-center">
                                         <div>
-                                            <p class="font-bold">{user.firstName} {user.lastName}</p>
-                                            <p class="text-sm opacity-75">{user.username}</p>
-                                            <p class="text-xs opacity-50">Role: {user.role}</p>
+                                            <p class="font-bold">{purchase.quantity} Credits</p>
+                                            <p class="text-sm opacity-75">Total: {purchase.totalAmount}DH</p>
+                                            <p class="text-xs opacity-50">RIB: {purchase.accountNumber}</p>
                                         </div>
                                         <div class="flex gap-2">
-                                            <form method="POST" action="?/removeAgent" use:enhance>
-                                                <input type="hidden" name="id" value={user.id}>
-                                                <button class="btn variant-filled-error">Delete</button>
+                                            <form method="POST" action="?/acceptPur" use:enhance>
+                                                <input type="hidden" name="id" value={purchase.id}>
+                                                <button class="btn variant-filled-success">Accept</button>
+                                            </form>
+                                            <form method="POST" action="?/rejectPur" use:enhance>
+                                                <input type="hidden" name="id" value={purchase.id}>
+                                                <button class="btn variant-filled-error">Reject</button>
                                             </form>
                                         </div>
                                     </div>
                                 </div>
                             {/each}
-                        {:else}
-                            <p class="text-center opacity-50">No Users</p>
-                        {/if}
-                    </div>
+                        </div>
+                    {:else if tabSet === 2 && $page.data.role == "admin"}
+                        <div class="space-y-4 p-4">
+                            <h3 class="h2 w-full text-center">Agents</h3>
+                            {#if $page.data.agents.length > 0}
+                                {#each $page.data.agents as user}
+                                    <div class="card p-4 variant-glass-surface">
+                                        <div class="flex justify-between items-center">
+                                            <div>
+                                                <p class="font-bold">{user.firstName} {user.lastName}</p>
+                                                <p class="text-sm opacity-75">{user.username}</p>
+                                                <p class="text-xs opacity-50">Role: {user.role}</p>
+                                            </div>
+                                            <div class="flex gap-2">
+                                                <form method="POST" action="?/removeAgent" use:enhance>
+                                                    <input type="hidden" name="id" value={user.id}>
+                                                    <button class="btn variant-filled-error">Delete</button>
+                                                </form>
+                                            </div>
+                                        </div>
+                                    </div>
+                                {/each}
+                            {:else}
+                                <p class="text-center opacity-50">No Users</p>
+                            {/if}
+                        </div>
+                    {/if}
+                </svelte:fragment>
+            </TabGroup>
+        </div>
+
+        <!-- Desktop Grid -->
+        <div class="hidden md:grid {$page.data.role == "admin" ? "grid-cols-3" : "grid-cols-2"} p-4 w-full">
+            <div class="space-y-4">
+                <h3 class="h2 w-full text-center">Publications</h3>
+                {#if $page.data.unverifiedPubs.length == 0}
+                    <p class="text-center opacity-50">No Publications</p>
                 {/if}
+                {#each $page.data.unverifiedPubs as pub}
+                    <PublicationCard 
+                        pub={pub}
+                        isAdmin={true}
+                    />
+                {/each}
+            </div>
+            <div class="space-y-4">
+                <h3 class="h2 w-full text-center">Purchases</h3>
+                {#if $page.data.unverifiedPurshases.length == 0}
+                    <p class="text-center opacity-50">No Purchases</p>
+                {/if}
+                {#each $page.data.unverifiedPurshases as purchase}
+                    <div class="card p-4 variant-glass-surface">
+                        <div class="flex justify-between items-center">
+                            <div>
+                                <p class="font-bold">{purchase.quantity} Credits</p>
+                                <p class="text-sm opacity-75">Total: {purchase.totalAmount}DH</p>
+                                <p class="text-xs opacity-50">RIB: {purchase.accountNumber}</p>
+                            </div>
+                            <div class="flex gap-2">
+                                <form method="POST" action="?/acceptPur" use:enhance>
+                                    <input type="hidden" name="id" value={purchase.id}>
+                                    <button class="btn variant-filled-success">Accept</button>
+                                </form>
+                                <form method="POST" action="?/rejectPur" use:enhance>
+                                    <input type="hidden" name="id" value={purchase.id}>
+                                    <button class="btn variant-filled-error">Reject</button>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                {/each}
+            </div>
+            {#if $page.data.role == "admin"}
+                <div class="space-y-4">
+                    <h3 class="h2 w-full text-center">Agents</h3>
+                    {#if $page.data.agents.length > 0}
+                        {#each $page.data.agents as user}
+                            <div class="card p-4 variant-glass-surface">
+                                <div class="flex justify-between items-center">
+                                    <div>
+                                        <p class="font-bold">{user.firstName} {user.lastName}</p>
+                                        <p class="text-sm opacity-75">{user.username}</p>
+                                        <p class="text-xs opacity-50">Role: {user.role}</p>
+                                    </div>
+                                    <div class="flex gap-2">
+                                        <form method="POST" action="?/removeAgent" use:enhance>
+                                            <input type="hidden" name="id" value={user.id}>
+                                            <button class="btn variant-filled-error">Delete</button>
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
+                        {/each}
+                    {:else}
+                        <p class="text-center opacity-50">No Users</p>
+                    {/if}
+                </div>
+            {/if}
         </div>
     </div>
 </div>

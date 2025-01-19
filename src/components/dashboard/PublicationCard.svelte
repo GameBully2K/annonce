@@ -4,6 +4,7 @@
     import { selectedPublicationStore } from '$lib/stores';
     import type { DrawerSettings } from '@skeletonlabs/skeleton';
     import { getDrawerStore } from '@skeletonlabs/skeleton';
+    import { newPublicationStateStore } from '$lib/stores';
 
     const statusColors = {
         pending: 'variant-ghost-warning',
@@ -34,6 +35,7 @@
     
     export let pub:Publication; 
     export let isAdmin: boolean;
+
     const drawerStore = getDrawerStore();
 
     const date = new Date(pub.updatedAt).toLocaleDateString();
@@ -72,7 +74,9 @@
                 <form method="POST" action="?/loadPub" use:enhance>
                     <input type="text" name="pubId" value={pub.id} hidden>
                     <input type="text" name="pubType" value="pub" hidden>
-                    <button class="btn variant-filled-warning" type="submit">Modifier</button>
+                    <button class="btn variant-filled-warning" type="submit" on:click={() => {
+                        newPublicationStateStore.set(false);
+                    }}>Modifier</button>
                 </form>
             {/if}
         {:else}

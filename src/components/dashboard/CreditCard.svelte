@@ -31,7 +31,7 @@
 
 </script>
 
-<div class="card flex flex-col justify-evenly p-4 variant-glass-surface">
+<div class="card flex flex-col justify-evenly p-4 variant-glass-surface h-full">
     <div class="flex justify-between items-center">
         <div>
             <h3 class="h3">Mes Crédits</h3>

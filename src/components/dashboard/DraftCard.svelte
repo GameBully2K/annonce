@@ -1,5 +1,6 @@
 <script lang="ts">
     import { enhance } from '$app/forms';
+	import { newPublicationStateStore } from '$lib/stores';
     export let title: string;
     export let date: string;
     export let type: string;
@@ -19,7 +20,9 @@
         <form method="POST" action="?/loadPub" use:enhance>
             <input type="text" name="pubId" bind:value={pubId} hidden>
             <input type="text" name="pubType" value="draft" hidden> <!--0 for draft, 1 for publication-->
-            <button class="btn variant-filled-warning" type="submit">Modifier</button>
+            <button class="btn variant-filled-warning" type="submit" on:click={() => {
+                newPublicationStateStore.set(false);
+                }} >Modifier</button>
         </form>
         <form method="POST" action="?/deleteDraft" use:enhance>
             <input type="text" name="draftId" value={pubId} hidden>
