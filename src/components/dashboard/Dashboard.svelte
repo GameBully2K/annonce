@@ -53,9 +53,10 @@
 
 	// edit publication States
 	export let toBeEditedDraft: Draft | null = null;
-	$: if (toBeEditedDraft) {
-		newPublicationState = true;
-	}
+	$:if (toBeEditedDraft) {
+			newPublicationState = false;
+			newPublicationState = true;
+		};
 
 	export let credits = 0;
 	export let recentPublications = [] as Publication[];
@@ -70,6 +71,17 @@
 
 	// Add new state for active tab
 	let activeTab: 'publications' | 'drafts' = 'publications';
+
+	async function handleNewPublication() {
+		if (toBeEditedDraft && newPublicationState) {
+			toBeEditedDraft = null;
+			newPublicationState = false;
+			await new Promise(resolve => setTimeout(resolve, 5));
+			newPublicationState = true;
+		} else {
+			newPublicationState = !newPublicationState;
+		}
+	}
 </script>
 
 <div class="bg-surface-50-900-token flex min-h-screen flex-col">
@@ -94,7 +106,7 @@
 		<!-- Quick Actions -->
 		<div class="card variant-glass-surface mb-8 p-4">
 			<div class="flex gap-4 justify-between items-center">
-				<button class="btn variant-filled-primary" on:click={() => (newPublicationState = !newPublicationState)}>
+				<button class="btn variant-filled-primary" on:click={ async () => handleNewPublication()}>
 					Nouvelle Publication
 				</button>
 				<button class="btn-icon variant-soft-primary hover:variant-filled-secondary" on:click={() => location.reload()}>
