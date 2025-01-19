@@ -138,15 +138,19 @@ async function createSessionCookie( event:PageServerLoadEvent , lucia: Lucia , i
 
 async function checkName( db: DrizzleD1Database<typeof schema>, existingUser: DatabaseUserAttributes ,user: GoogleUser) {
     console.log(JSON.stringify(existingUser));
-    if (existingUser.lastName == "" || !existingUser.lastName) {
-        await db.update(schema.userTable).set({
-            lastName: user.family_name
-        }).where(eq(schema.userTable.id, existingUser.id));
+    if (user.family_name) {
+        if (existingUser.lastName == "" || !existingUser.lastName) {
+            await db.update(schema.userTable).set({
+                lastName: user.family_name
+            }).where(eq(schema.userTable.id, existingUser.id));
+        }
     }
-    if (existingUser.firstName == "" || !existingUser.firstName) {
-        await db.update(schema.userTable).set({
-            firstName: user.given_name
-        }).where(eq(schema.userTable.id, existingUser.id));
+    if (user.given_name) {
+        if (existingUser.firstName == "" || !existingUser.firstName) {
+            await db.update(schema.userTable).set({
+                firstName: user.given_name
+            }).where(eq(schema.userTable.id, existingUser.id));
+        }
     }
     return true
 }
