@@ -84,12 +84,13 @@
 	}
 </script>
 
-<div class="bg-surface-50-900-token flex min-h-screen flex-col">
-	<div class="container mx-auto p-4">
-		<div class="mb-8 grid gap-4 md:grid-cols-2">
+<div class="bg-surface-50-900-token min-h-screen">
+	<div class="container mx-auto p-2 sm:p-4">
+		<!-- Welcome and Stats Section -->
+		<div class="mb-4 sm:mb-8 grid gap-4">
 			<!-- Welcome Section -->
-			<div class="card variant-glass-surface flex flex-col justify-evenly p-4">
-				<h2 class="h2">Bonjour, {$page.data.firstName ?? $page.data.username}</h2>
+			<div class="card variant-glass-surface p-4">
+				<h2 class="h2 text-xl sm:text-2xl md:text-3xl">Bonjour, {$page.data.firstName ?? $page.data.username}</h2>
 				<p class="opacity-75">Bienvenue sur votre tableau de bord</p>
 				<StatsCard
 					totalPublications={stats.totalPublications}
@@ -100,13 +101,15 @@
 			</div>
 
 			<!-- Credit Card -->
-			<CreditCard {credits} {pendingPurchase} />
+			<div class="w-full">
+				<CreditCard {credits} {pendingPurchase} />
+			</div>
 		</div>
 
 		<!-- Quick Actions -->
-		<div class="card variant-glass-surface mb-8 p-4">
-			<div class="flex gap-4 justify-between items-center">
-				<button class="btn variant-filled-primary" on:click={ async () => handleNewPublication()}>
+		<div class="card variant-glass-surface mb-4 sm:mb-8 p-4">
+			<div class="flex flex-col sm:flex-row gap-4 justify-between items-center">
+				<button class="btn variant-filled-primary w-full sm:w-auto" on:click={async () => handleNewPublication()}>
 					Nouvelle Publication
 				</button>
 				<button class="btn-icon variant-soft-primary hover:variant-filled-secondary" on:click={() => location.reload()}>
@@ -128,15 +131,15 @@
 		<div class="card variant-glass-surface p-0">
 			<div class="flex flex-col gap-4 p-4">
 				<!-- Tab Navigation -->
-				<div class="flex gap-4 border-b border-surface-500/30 pb-4">
+				<div class="flex gap-2 sm:gap-4 border-b border-surface-500/30 pb-4 overflow-x-auto">
 					<button
-						class="btn {activeTab === 'publications' ? 'variant-filled' : 'variant-ghost'}"
+						class="btn btn-sm sm:btn-md {activeTab === 'publications' ? 'variant-filled' : 'variant-ghost'}"
 						on:click={() => (activeTab = 'publications')}
 					>
-						Publications récentes
+						Publications
 					</button>
 					<button
-						class="btn {activeTab === 'drafts' ? 'variant-filled' : 'variant-ghost'}"
+						class="btn btn-sm sm:btn-md {activeTab === 'drafts' ? 'variant-filled' : 'variant-ghost'}"
 						on:click={() => (activeTab = 'drafts')}
 					>
 						Brouillons
@@ -145,7 +148,7 @@
 
 				<!-- Tab Content -->
 				{#if activeTab === 'publications'}
-					<div class="grid gap-4 md:grid-cols-2">
+					<div class="grid gap-4 grid-cols-1 md:grid-cols-2">
 						{#each recentPublications as pub}
 							<PublicationCard
 								pub={pub}
@@ -156,7 +159,7 @@
 						{/each}
 					</div>
 				{:else}
-					<div class="grid gap-4 md:grid-cols-2">
+					<div class="grid gap-4 grid-cols-1 md:grid-cols-2">
 						{#each draftPublications as draft}
 							<DraftCard
 								pubId={draft.id}

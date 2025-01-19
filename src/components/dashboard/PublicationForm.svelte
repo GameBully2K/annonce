@@ -55,7 +55,7 @@
 </script>
 
 <div class="space-y-4">
-    <h3 class="h3">Nouvelle Publication</h3>
+    <h3 class="h3 text-lg sm:text-xl md:text-2xl">Nouvelle Publication</h3>
     
     <form method="POST" action="?/publish" use:enhance class="space-y-4">
         {#if draftId}
@@ -114,11 +114,11 @@
             </label>
         </div>
 
-        <div class="flex justify-between gap-4">
-            <button type="submit" class="btn variant-filled-primary" formaction="?/saveDraft" on:click={() => draft = null}>
+        <div class="flex flex-col sm:flex-row justify-between gap-4">
+            <button type="submit" class="btn w-full sm:w-auto variant-filled-primary" formaction="?/saveDraft" on:click={() => draft = null}>
                 Enregistrer comme brouillon
             </button>
-            <button type="submit" class="btn variant-filled-success gap-2" on:click={() => draft = null}>
+            <button type="submit" class="btn w-full sm:w-auto variant-filled-success gap-2" on:click={() => draft = null}>
                 Publier (1 crédit)
             </button>
         </div>
