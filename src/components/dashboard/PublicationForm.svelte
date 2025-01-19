@@ -115,10 +115,10 @@
         </div>
 
         <div class="flex justify-between gap-4">
-            <button type="submit" class="btn variant-filled-primary" formaction="?/saveDraft">
+            <button type="submit" class="btn variant-filled-primary" formaction="?/saveDraft" on:click={() => draft = null}>
                 Enregistrer comme brouillon
             </button>
-            <button type="submit" class="btn variant-filled-success gap-2">
+            <button type="submit" class="btn variant-filled-success gap-2" on:click={() => draft = null}>
                 Publier (1 crédit)
             </button>
         </div>
