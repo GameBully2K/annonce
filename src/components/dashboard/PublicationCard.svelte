@@ -5,6 +5,7 @@
     import type { DrawerSettings } from '@skeletonlabs/skeleton';
     import { getDrawerStore } from '@skeletonlabs/skeleton';
     import { newPublicationStateStore } from '$lib/stores';
+    import { toBeEditedPublicationStore } from '$lib/stores';
 
     const statusColors = {
         pending: 'variant-ghost-warning',
@@ -71,13 +72,12 @@
                     <input type="text" name="pubId" value={pub.id} hidden>
                     <button class="btn variant-filled-error" type="submit">Cancel</button>
                 </form>
-                <form method="POST" action="?/loadPub" use:enhance>
-                    <input type="text" name="pubId" value={pub.id} hidden>
-                    <input type="text" name="pubType" value="pub" hidden>
-                    <button class="btn variant-filled-warning" type="submit" on:click={() => {
+                <button class="btn variant-filled-warning" on:click={() => {
                         newPublicationStateStore.set(false);
-                    }}>Modifier</button>
-                </form>
+                        toBeEditedPublicationStore.set(pub);
+                        newPublicationStateStore.set(true);
+                    }} >Modifier
+                </button>   
             {/if}
         {:else}
             <form method="POST" action="?/acceptPub" use:enhance>

@@ -1,5 +1,6 @@
 <script lang="ts">
     import { enhance } from '$app/forms';
+	import { toBeEditedPublicationStore } from '$lib/stores';
 
     const companyTypes = ['SARL', 'SARLAU', 'SNC', 'SCS', 'SCA', 'SAS', 'SA', 'GIE'];
     const publicationTypes = [
@@ -115,10 +116,10 @@
         </div>
 
         <div class="flex flex-col sm:flex-row justify-between gap-4">
-            <button type="submit" class="btn w-full sm:w-auto variant-filled-primary" formaction="?/saveDraft" on:click={() => draft = null}>
+            <button type="submit" class="btn w-full sm:w-auto variant-filled-primary" formaction="?/saveDraft" on:click={() => toBeEditedPublicationStore.set(null)}>
                 Enregistrer comme brouillon
             </button>
-            <button type="submit" class="btn w-full sm:w-auto variant-filled-success gap-2" on:click={() => draft = null}>
+            <button type="submit" class="btn w-full sm:w-auto variant-filled-success gap-2" on:click={() => toBeEditedPublicationStore.set(null)}>
                 Publier (1 crédit)
             </button>
         </div>

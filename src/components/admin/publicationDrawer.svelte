@@ -2,21 +2,7 @@
     import { getDrawerStore } from "@skeletonlabs/skeleton";
     import { enhance } from "$app/forms";
     import { selectedPublicationStore } from "$lib/stores";
-
-    interface Publication {
-        id: string;
-        userId: string;
-        title: string;
-        companyType: string;
-        publicationType: string;
-        body: string;
-        status: 'pending' | 'verified' | 'rejected';
-        reviewedBy?: string;
-        reviewedAt?: number;
-        feedback?: string;
-        createdAt: number;
-        updatedAt: number;
-    }
+    import type { Publication } from "$lib/types";
 
     const drawerStore = getDrawerStore();
     async function closeDrawer() {

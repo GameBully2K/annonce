@@ -7,58 +7,10 @@
 	import StatsCard from './StatsCard.svelte';
 	import { page } from '$app/stores';
 	import { newPublicationStateStore } from '$lib/stores';
-	
+	import { onMount } from 'svelte';
+	import { toBeEditedPublicationStore } from '$lib/stores';
+	import type { Draft, Publication, purchaseTransaction } from '$lib/types';
 
-	console.log('New Publication State:', $newPublicationStateStore);
-
-	// publication interface
-	interface Publication {
-		id: string;
-		userId: string;
-		title: string;
-		companyType: string;
-		publicationType: string;
-		body: string;
-		status: 'pending' | 'verified' | 'rejected';
-		reviewedBy?: string;
-		reviewedAt?: number;
-		feedback?: string;
-		createdAt: number;
-		updatedAt: number;
-	}
-	// draft interface
-	interface Draft {
-		id: string;
-		userId: string;
-		title: string;
-		companyType: string;
-		publicationType: string;
-		body: string;
-		createdAt: number;
-		updatedAt: number;
-	}
-
-	interface purchaseTransaction {
-		id: string;
-		userId: string;
-		creditTransactionId: string;
-		quantity: number;
-		pricePerCredit?: number;
-		totalAmount?: number;
-		status: 'pending' | 'verified' | 'rejected';
-		paymentMethod?: 'bank_transfer' | 'card';
-		accountNumber?: string;
-		createdAt: number;
-		updatedAt: number;
-	}
-
-	// edit publication States
-	export let toBeEditedDraft: Draft | null = null;
-	$:if (toBeEditedDraft) {
-		newPublicationStateStore.set(true);
-	} else {
-		newPublicationStateStore.set(true);
-	}
 
 	export let credits = 0;
 	export let recentPublications = [] as Publication[];
@@ -75,8 +27,8 @@
 	let activeTab: 'publications' | 'drafts' = 'publications';
 
 	async function handleNewPublication() {
-		if (toBeEditedDraft && $newPublicationStateStore) {
-			toBeEditedDraft = null;
+		if ($toBeEditedPublicationStore && $newPublicationStateStore) {
+			$toBeEditedPublicationStore = null;
 			newPublicationStateStore.set(false);
 			await new Promise(resolve => setTimeout(resolve, 1));
 			newPublicationStateStore.set(true);
@@ -127,7 +79,7 @@
 
 		{#if $newPublicationStateStore}
 			<div class="card variant-glass-surface mb-8 p-4">
-				<PublicationForm draft={toBeEditedDraft} />
+				<PublicationForm draft={$toBeEditedPublicationStore} />
 			</div>
 		{/if}
 
@@ -166,10 +118,7 @@
 					<div class="grid gap-4 grid-cols-1 md:grid-cols-2">
 						{#each draftPublications as draft}
 							<DraftCard
-								pubId={draft.id}
-								title={draft.title}
-								date={new Date(draft.updatedAt).toLocaleDateString()}
-								type={draft.publicationType}
+								pub={draft}
 							/>
 						{:else}
 							<p class="text-center opacity-50">Aucun brouillon</p>

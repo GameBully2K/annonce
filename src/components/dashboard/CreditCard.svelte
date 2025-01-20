@@ -2,20 +2,7 @@
 <script lang="ts">
     import { getDrawerStore } from '@skeletonlabs/skeleton';
     import type { DrawerSettings } from '@skeletonlabs/skeleton';
-
-    interface purchaseTransaction {
-        id: string;
-        userId: string;
-        creditTransactionId: string;
-        quantity: number;
-        pricePerCredit?: number;
-        totalAmount?: number;
-        status: 'pending' | 'verified' | 'rejected';
-        paymentMethod?: 'bank_transfer' | 'card';
-        accountNumber?: string;
-        createdAt: number;
-        updatedAt: number;
-    }
+    import type { purchaseTransaction } from '$lib/types';
 
     const drawerStore = getDrawerStore();
     const settings: DrawerSettings = {
