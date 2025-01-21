@@ -28,9 +28,9 @@
 
 	async function handleNewPublication() {
 		if ($toBeEditedPublicationStore && $newPublicationStateStore) {
-			$toBeEditedPublicationStore = null;
 			newPublicationStateStore.set(false);
-			await new Promise(resolve => setTimeout(resolve, 1));
+			toBeEditedPublicationStore.set(null);
+			await new Promise(r => setTimeout(r, 5));
 			newPublicationStateStore.set(true);
 		} else {
 			newPublicationStateStore.set(!$newPublicationStateStore);

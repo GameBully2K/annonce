@@ -78,89 +78,89 @@ export const load: PageServerLoad = async (event) => {
 };
 
 export const actions = {
-	loadPub: async (event) => {
-		console.log("loadPub");
-		if (!event.locals.user) {
-			return {
-				Success: false,
-				message: 'Non Authentifier',
-				pub: null
-			};
-		}
+	// loadPub: async (event) => {
+	// 	console.log("loadPub");
+	// 	if (!event.locals.user) {
+	// 		return {
+	// 			Success: false,
+	// 			message: 'Non Authentifier',
+	// 			pub: null
+	// 		};
+	// 	}
 
-		const db = drizzle(event.platform?.env.DB as D1Database, { schema });
+	// 	const db = drizzle(event.platform?.env.DB as D1Database, { schema });
 
-		const formData = await event.request.formData();
-		const pubId = formData.get('pubId')?.toString() || "";
-		const pubType = formData.get('pubType')?.toString() || "";
+	// 	const formData = await event.request.formData();
+	// 	const pubId = formData.get('pubId')?.toString() || "";
+	// 	const pubType = formData.get('pubType')?.toString() || "";
 
-		console.log(pubId, pubType);
+	// 	console.log(pubId, pubType);
 
-		if (!pubId || !pubType) {
-			return redirect(301,'/');
-		}
+	// 	if (!pubId || !pubType) {
+	// 		return redirect(301,'/');
+	// 	}
 
-		//get the publication
-		if (pubType === "draft") {
-			const draft = await db.query.draftTable.findFirst({
-				where: eq(schema.draftTable.id, pubId)
-			})
-			return {
-				Success: true,
-				message: 'Publication chargée',
-				draft: draft
-			};
-		}else {
-			const publication = await db.query.publicationTable.findFirst({
-				where: eq(schema.publicationTable.id, pubId)
-			});
-			if (publication) {
-				//delete the publication and make it draft
-				const newDraft = await db.insert(schema.draftTable).values({
-					id: publication.id,
-					userId: publication.userId,
-					companyType: publication.companyType,
-					publicationType: publication.publicationType,
-					body: publication.body,
-					title: publication.title,
-					createdAt: publication.createdAt,
-					updatedAt: publication.updatedAt
-				});
-				if (!newDraft.success) return {
-					Success: false,
-					message: 'Erreur lors de la récupération de la publication'
-				};
-				const deleted = await db.delete(schema.publicationTable).where(eq(schema.publicationTable.id, pubId));
-				if (!deleted.success) return {
-					Success: false,
-					message: 'Erreur lors de la suppression de la publication'
-				};
-				//give the user his credit back
-				const payBack = await db.update(schema.userTable).set({
-					credits: event.locals.user.credits + 1,
-					updatedAt: Date.now()
-				}).where(eq(schema.userTable.id, publication.userId));
-				if (!payBack.success) return {
-					Success: false,
-					message: 'Erreur lors du remboursement'
-				};
+	// 	//get the publication
+	// 	if (pubType === "draft") {
+	// 		const draft = await db.query.draftTable.findFirst({
+	// 			where: eq(schema.draftTable.id, pubId)
+	// 		})
+	// 		return {
+	// 			Success: true,
+	// 			message: 'Publication chargée',
+	// 			draft: draft
+	// 		};
+	// 	}else {
+	// 		const publication = await db.query.publicationTable.findFirst({
+	// 			where: eq(schema.publicationTable.id, pubId)
+	// 		});
+	// 		if (publication) {
+	// 			//delete the publication and make it draft
+	// 			const newDraft = await db.insert(schema.draftTable).values({
+	// 				id: publication.id,
+	// 				userId: publication.userId,
+	// 				companyType: publication.companyType,
+	// 				publicationType: publication.publicationType,
+	// 				body: publication.body,
+	// 				title: publication.title,
+	// 				createdAt: publication.createdAt,
+	// 				updatedAt: publication.updatedAt
+	// 			});
+	// 			if (!newDraft.success) return {
+	// 				Success: false,
+	// 				message: 'Erreur lors de la récupération de la publication'
+	// 			};
+	// 			const deleted = await db.delete(schema.publicationTable).where(eq(schema.publicationTable.id, pubId));
+	// 			if (!deleted.success) return {
+	// 				Success: false,
+	// 				message: 'Erreur lors de la suppression de la publication'
+	// 			};
+	// 			//give the user his credit back
+	// 			const payBack = await db.update(schema.userTable).set({
+	// 				credits: event.locals.user.credits + 1,
+	// 				updatedAt: Date.now()
+	// 			}).where(eq(schema.userTable.id, publication.userId));
+	// 			if (!payBack.success) return {
+	// 				Success: false,
+	// 				message: 'Erreur lors du remboursement'
+	// 			};
 			
-				 // Comment out log
-				/*await db.insert(schema.logTable).values({
-					id: generateIdFromEntropySize(8),
-					userId: event.locals.user.id,
-					action: 'publication_to_draft',
-					details: JSON.stringify({ publicationId: pubId }),
-					createdAt: Date.now()
-				});*/
-			}
-			return {
-				Success: true,
-				message: 'Publication chargée',
-				draft: publication
-			};
-		}
-	},
+	// 			 // Comment out log
+	// 			/*await db.insert(schema.logTable).values({
+	// 				id: generateIdFromEntropySize(8),
+	// 				userId: event.locals.user.id,
+	// 				action: 'publication_to_draft',
+	// 				details: JSON.stringify({ publicationId: pubId }),
+	// 				createdAt: Date.now()
+	// 			});*/
+	// 		}
+	// 		return {
+	// 			Success: true,
+	// 			message: 'Publication chargée',
+	// 			draft: publication
+	// 		};
+	// 	}
+	// },
 	saveDraft: async (event) => {
 		if (!event.locals.user) {
 			return fail(401, {

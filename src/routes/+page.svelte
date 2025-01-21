@@ -5,6 +5,7 @@
 	import type { ActionData } from './$types';
     import { getToastStore, getDrawerStore } from '@skeletonlabs/skeleton';
     import type { ToastSettings } from '@skeletonlabs/skeleton';
+	import { newPublicationStateStore, toBeEditedPublicationStore } from '$lib/stores';
 
     const drawerStore = getDrawerStore();
     const toastStore = getToastStore();
@@ -21,12 +22,16 @@
 	}
 
 	export let form: ActionData;
-    let toBeEditedDraft: Draft | null = null;
 
-    $: if (form?.draft) {
-        toBeEditedDraft = form.draft as Draft;
-        console.log(toBeEditedDraft);
-    }
+    $: if ($newPublicationStateStore && $toBeEditedPublicationStore) {
+        const t: ToastSettings = {
+            message: "Publication Chargée",
+            autohide: true,
+            hideDismiss: false,
+            background:  'variant-filled-success'
+        };
+        toastStore.trigger(t);
+	}
 
     $: if (form?.message == "Achat enregistré") {
         drawerStore.close();
@@ -57,7 +62,6 @@
             draftPublications={$page.data.drafts}
             pendingPurchase={$page.data.pendingPurchase}
             stats={$page.data.stats}
-            toBeEditedDraft={toBeEditedDraft}
         />
     {:else}
         <LandingPage/>
