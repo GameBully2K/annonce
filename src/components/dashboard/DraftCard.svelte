@@ -12,9 +12,9 @@
 <div class="card p-4 variant-glass-surface">
     <div class="flex justify-between items-start">
         <div>
-            <h4 class="h4">{pub.id}</h4>
+            <h4 class="h4">{pub.title}</h4>
             <p class="text-sm opacity-75">{pub.publicationType}</p>
-            <p class="text-xs opacity-50">{pub.updatedAt}</p>
+            <p class="text-xs opacity-50">{new Date(pub.updatedAt).toDateString()}</p>
         </div>
     </div>
     <div class="mt-4 flex gap-2">

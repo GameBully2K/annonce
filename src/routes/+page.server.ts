@@ -161,6 +161,78 @@ export const actions = {
 	// 		};
 	// 	}
 	// },
+	pubToDraft: async (event) => {
+		if (!event.locals.user) {
+			return {
+				Success: false,
+				message: 'Non Authentifier'
+			};
+		}
+		
+		const db = drizzle(event.platform?.env.DB as D1Database, { schema });
+		const formData = await event.request.formData();
+
+		const pubId = formData.get('pubId')?.toString();
+
+		if (!pubId) {
+			return {
+				Success: false,
+				message: 'Données invalides'
+			};
+		}
+
+		const publication = await db.query.publicationTable.findFirst({
+			where: eq(schema.publicationTable.id, pubId)
+		});
+
+		if (!publication) {
+			return {
+				Success: false,
+				message: 'Publication introuvable'
+			};
+		}
+
+		//delete the publication and make it draft
+		const newDraft = await db.insert(schema.draftTable).values({
+			id: publication.id,
+			userId: publication.userId,
+			companyType: publication.companyType,
+			publicationType: publication.publicationType,
+			body: publication.body,
+			title: publication.title,
+			createdAt: publication.createdAt,
+			updatedAt: publication.updatedAt
+		});
+
+		if (!newDraft.success) {
+			return {
+				Success: false,
+				message: 'Erreur lors de la récupération de la publication'
+			};
+		}
+		
+		const deleted = await db.delete(schema.publicationTable).where(eq(schema.publicationTable.id, pubId));
+
+		if (!deleted.success) {
+			return {
+				Success: false,
+				message: 'Erreur lors de la suppression de la publication'
+			};
+		}
+
+		//give the user his credit back
+		const payBack = await db.update(schema.userTable).set({
+			credits: event.locals.user.credits + 1,
+			updatedAt: Date.now()
+		}).where(eq(schema.userTable.id, publication.userId));
+
+		return {
+			Success: true,
+			message: 'Publication transformée en brouillon',
+			pub: publication
+		};
+
+	},
 	saveDraft: async (event) => {
 		if (!event.locals.user) {
 			return fail(401, {

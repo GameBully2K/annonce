@@ -30,7 +30,7 @@
 </script>
 
 <svelte:head>{@html '<script>(' + autoModeWatcher.toString() + ')();</script>'}</svelte:head>
-<div class="announcement-bar z-40 w-full bg-[#263763] text-white py-2 px-4 flex items-center justify-between">
+<div class="{!$page.data.loggedIn ? "fixed": ""} announcement-bar z-40 w-full bg-[#263763] text-white py-2 px-4 flex items-center justify-between">
     <div class="flex items-center">
 		{#if $page.data.isAdmin == false}
 		<svg class="h-5 w-5 mr-2 fill-current" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true" role="img" focusable="false">

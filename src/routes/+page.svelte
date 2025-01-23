@@ -6,20 +6,10 @@
     import { getToastStore, getDrawerStore } from '@skeletonlabs/skeleton';
     import type { ToastSettings } from '@skeletonlabs/skeleton';
 	import { newPublicationStateStore, toBeEditedPublicationStore } from '$lib/stores';
+    import type { Draft } from '$lib/types';
 
     const drawerStore = getDrawerStore();
     const toastStore = getToastStore();
-
-    interface Draft {
-		id: string;
-		userId: string;
-		title: string;
-		companyType: string;
-		publicationType: string;
-		body: string;
-		createdAt: number;
-		updatedAt: number;
-	}
 
 	export let form: ActionData;
 
@@ -32,6 +22,12 @@
         };
         toastStore.trigger(t);
 	}
+
+    $: if (form?.message.includes("transformée")) {
+        toBeEditedPublicationStore.set(form.pub as Draft);
+        newPublicationStateStore.set(true);
+        
+    }
 
     $: if (form?.message == "Achat enregistré") {
         drawerStore.close();
