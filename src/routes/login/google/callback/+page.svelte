@@ -27,14 +27,14 @@
     {#if username}
     <div class="p-4 h-[50%] flex justify-center items-center">
         <div class="card flex flex-col p-10  gap-y-5 justify-center items-center text-center">
-            <h1 class="h2 md:h1">Welcome, <bold>{username}</bold></h1>
-            <p>You are logged in. Redirecting... </p>
+            <h1 class="h2 md:h1">Bienvenue, <bold>{username}</bold></h1>
+            <p>Vous êtes connecté. Redirection en cours... </p>
         </div>
     </div>
     {:else}
     <div class="p-4 h-[50%] flex justify-center items-center">
         <div class="animate-slideUp card flex flex-col p-10 gap-y-5 justify-center items-center text-center">
-            <h1 class="h1 font-semibold ">Error</h1>
+            <h1 class="h1 font-semibold ">Erreur</h1>
             <p>{error}</p>
         </div>
     </div>

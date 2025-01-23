@@ -39,12 +39,12 @@ export const load: PageServerLoad = async (event) => {
 
     if (!state || !code || !storedState || !storedCodeVerifier) {
         return {
-            error: "Invalid request"
+            error: "Requête invalide"
         };
     }
     if (state !== storedState) {
         return {
-            error: "Invalid state"
+            error: "État invalide"
         };
     }
 
@@ -61,13 +61,13 @@ export const load: PageServerLoad = async (event) => {
 
         if (!user) {
             return {
-                error: "Google user not found"
+                error: "Utilisateur Google non trouvé"
             };
         }
 
         if (!user.email_verified) {
             return {
-                error: "Email not verified at Google"
+                error: "Email non vérifié sur Google"
             }
         }
 
@@ -122,7 +122,7 @@ export const load: PageServerLoad = async (event) => {
     } catch (e:any) {
         console.error(e);
         return {
-            error: e.message?? e.description?? "An error occured"
+            error: e.message?? e.description?? "Une erreur est survenue"
         }
     }
 }

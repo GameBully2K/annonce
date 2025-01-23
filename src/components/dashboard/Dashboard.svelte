@@ -121,7 +121,7 @@
 								pub={draft}
 							/>
 						{:else}
-							<p class="text-center opacity-50">Aucun brouillon</p>
+							<p class="col-span-2 text-center opacity-50">Aucun brouillon</p>
 						{/each}
 					</div>
 				{/if}

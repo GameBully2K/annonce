@@ -78,12 +78,12 @@ export const actions = {
     acceptPub: async (event) => {
         if (!event.locals.user) {
             return fail(401, {
-                message: 'unauthenticated'
+                message: 'Non authentifié'
             });
         }
         if (!event.locals.user.role || event.locals.user.role === 'user') {
             return fail(403, {
-                message: 'Forbidden'
+                message: 'Accès interdit'
             });
         }
 
@@ -98,13 +98,13 @@ export const actions = {
         if (!pub) {
             return {
                 Success: false,
-                message: 'Publication not found'
+                message: 'Publication introuvable'
             }
         }
         if (pub.reviewedBy) {
             return {
                 Success: false,
-                message: 'Publication already reviewed'
+                message: 'Publication déjà examinée'
             }
         }
         const updated = await db.update(schema.publicationTable).set({
@@ -114,18 +114,18 @@ export const actions = {
         }).where(eq(schema.publicationTable.id, id))
         return {
             Success: updated.success===true,
-            message: 'Publication verified'
+            message: 'Publication vérifiée'
         };
     },
     rejectPub: async (event) => {
         if (!event.locals.user) {
             return fail(401, {
-                message: 'unauthenticated'
+                message: 'Non authentifié'
             });
         }
         if (!event.locals.user.role || event.locals.user.role === 'user') {
             return fail(403, {
-                message: 'Forbidden'
+                message: 'Accès interdit'
             });
         }
 
@@ -140,13 +140,13 @@ export const actions = {
         if (!pub) {
             return {
                 Success: false,
-                message: 'Publication not found'
+                message: 'Publication introuvable'
             }
         }
         if (pub.reviewedBy) {
             return {
                 Success: false,
-                message: 'Publication already reviewed'
+                message: 'Publication déjà examinée'
             }
         }
         const updated = await db.update(schema.publicationTable).set({
@@ -156,18 +156,18 @@ export const actions = {
         }).where(eq(schema.publicationTable.id, id))
         return {
             Success: updated.success===true,
-            message: 'Publication verified'
+            message: 'Publication vérifiée'
         };
     },
     acceptPur: async (event) => {
         if (!event.locals.user) {
             return fail(401, {
-                message: 'unauthenticated'
+                message: 'Non authentifié'
             });
         }
         if (!event.locals.user.role || event.locals.user.role === 'user') {
             return fail(403, {
-                message: 'Forbidden'
+                message: 'Accès interdit'
             });
         }
 
@@ -182,14 +182,14 @@ export const actions = {
         if (!pur) {
             return {
                 Success: false,
-                message: 'Purchase not found'
+                message: 'Achat introuvable'
             }
         }
 
         if (pur.verifiedBy) {
             return {
                 Success: false,
-                message: 'Purchase already verified'
+                message: 'Achat déjà vérifié'
             }
         }
 
@@ -211,18 +211,18 @@ export const actions = {
         }).where(eq(schema.paymentTable.id, id))
         return {
             Success: updatePur.success===true,
-            message: 'Purchase verified'
+            message: 'Achat vérifié'
         };
     },
     rejectPur: async (event) => {
         if (!event.locals.user) {
             return fail(401, {
-                message: 'unauthenticated'
+                message: 'Non authentifié'
             });
         }
         if (!event.locals.user.role || event.locals.user.role === 'user') {
             return fail(403, {
-                message: 'Forbidden'
+                message: 'Accès interdit'
             });
         }
         const db = drizzle(event.platform?.env.DB as D1Database, { schema });
@@ -236,18 +236,18 @@ export const actions = {
         }).where(eq(schema.paymentTable.id, id))
         return {
             Success: pur.success===true,
-            message: 'Purchase verified'
+            message: 'Achat vérifié'
         };
     },
     makeAgent: async (event) => {
         if (!event.locals.user) {
             return fail(401, {
-                message: 'unauthenticated'
+                message: 'Non authentifié'
             });
         }
         if (!event.locals.user.role || event.locals.user.role !== "admin") {
             return fail(403, {
-                message: 'Forbidden'
+                message: 'Accès interdit'
             });
         }
 
@@ -260,13 +260,13 @@ export const actions = {
         if (!user) {
             return {
                 Success: false,
-                message: 'User not found'
+                message: 'Utilisateur introuvable'
             }
         }
         if (user.role === 'agent') {
             return {
                 Success: false,
-                message: 'User is already an agent'
+                message: 'Cet utilisateur est déjà un agent'
             }
         }
         if (user.id == event.locals.user.id) {
@@ -280,18 +280,18 @@ export const actions = {
         }).where(eq(schema.userTable.email, email))
         return {
             Success: updated.success,
-            message: 'User is now an agent'
+            message: "L'utilisateur est maintenant un agent"
         };
     },
     removeAgent: async (event) => {
         if (!event.locals.user) {
             return fail(401, {
-                message: 'unauthenticated'
+                message: 'Non authentifié'
             });
         }
         if (!event.locals.user.role || event.locals.user.role !== "admin") {
             return fail(403, {
-                message: 'Forbidden'
+                message: 'Accès interdit'
             });
         }
 
@@ -304,13 +304,13 @@ export const actions = {
         if (!user) {
             return {
                 Success: false,
-                message: 'User not found'
+                message: 'Utilisateur introuvable'
             }
         }
         if (user.role === 'user') {
             return {
                 Success: false,
-                message: 'User is not an agent'
+                message: 'Utilisateur n\'est pas un agent'
             }
         }
         const updated = await db.update(schema.userTable).set({
@@ -318,7 +318,7 @@ export const actions = {
         }).where(eq(schema.userTable.id, id))
         return {
             Success: updated.success,
-            message: 'User is now a user'
+            message: 'Utilisateur est maintenant un utilisateur'
         };
     }
 }

@@ -538,7 +538,7 @@ export const actions = {
 			} else {
 				return {
 					Success: false,
-					message: 'Email Non envoyé'
+					message: 'Email non envoyé'
 				};
 			}
 		}else{

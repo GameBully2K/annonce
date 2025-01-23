@@ -39,14 +39,14 @@
 
     $: if (form?.message) {
         const t: ToastSettings = {
-            message: form.message ?? "All Good",
+            message: form.message ?? "Tout est bon",
             autohide: true,
             hideDismiss: false,
             background: form?.Success ? 'variant-filled-success' : 'variant-filled-error'
         };
         if (form.message.includes("Reload")) {
             t.action = {
-                label: "Reload",
+                label: "Recharger",
                 response: ()=>{location.reload()}
             }
         }

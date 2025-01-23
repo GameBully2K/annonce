@@ -40,7 +40,7 @@ export const actions: Actions = {
 			!/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/.test(email)
 		) {
 			return fail(400, {
-				message: "Invalid email"
+				message: "Email invalide"
 			});
 		}
 
@@ -53,7 +53,7 @@ export const actions: Actions = {
 		if (code) {
 			if (typeof code !== "string" || code.length !== 6 || !/^\d{6}$/.test(code)) {
 				return {
-					message: "Invalid code",
+					message: "Code invalide",
 					codeSent: true,
 					rectify: rectify
 				}
@@ -84,7 +84,7 @@ export const actions: Actions = {
 				return redirect(302, "/");				
 			} else {
 				return {
-					message: "wrong code",
+					message: "Code incorrect",
 					codeSent: true,
 					rectify: rectify
 				}
