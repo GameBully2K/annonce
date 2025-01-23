@@ -4,7 +4,7 @@ import type { PageServerLoad } from './$types';
 import { drizzle } from 'drizzle-orm/d1';
 import { eq, count, not } from 'drizzle-orm';
 import * as schema from '$db/schema';
-import {sendContactFormEmail} from '$lib/emailing/brevo';
+import {sendContactFormEmail, sendStatusNotificationEmail} from '$lib/emailing/brevo';
 import { dev } from "$app/environment";
 
 export const load: PageServerLoad = async (event) => {
@@ -112,6 +112,34 @@ export const actions = {
             reviewedBy: event.locals.user.id,
             reviewedAt: Date.now()
         }).where(eq(schema.publicationTable.id, id))
+
+        const user = await db.query.userTable.findFirst({
+            where: eq(schema.userTable.id, pub.userId)
+        });
+
+        if (!user) {
+            return {
+                Success: false,
+                message: 'Utilisateur introuvable'
+            }
+        }
+
+        const sendEmail = await sendStatusNotificationEmail(
+            user.firstName ?? user.username,
+            user.email,
+            'publication',
+            'approved',
+            pub.title as string,
+            event.platform?.env.SMTP_API_KEY as string
+        );
+
+        if (!sendEmail) {
+            return {
+                Success: false,
+                message: 'Failed to send email'
+            }
+        }
+
         return {
             Success: updated.success===true,
             message: 'Publication vérifiée'
@@ -154,6 +182,34 @@ export const actions = {
             reviewedBy: event.locals.user.id,
             reviewedAt: Date.now()
         }).where(eq(schema.publicationTable.id, id))
+
+        const user = await db.query.userTable.findFirst({
+            where: eq(schema.userTable.id, pub.userId)
+        });
+
+        if (!user) {
+            return {
+                Success: false,
+                message: 'Utilisateur introuvable'
+            }
+        }
+
+        const sendEmail = await sendStatusNotificationEmail(
+            user.firstName ?? user.username,
+            user.email,
+            'publication',
+            'rejected',
+            pub.title as string,
+            event.platform?.env.SMTP_API_KEY as string
+        );
+
+        if (!sendEmail) {
+            return {
+                Success: false,
+                message: 'Failed to send email'
+            }
+        }
+
         return {
             Success: updated.success===true,
             message: 'Publication vérifiée'
@@ -193,8 +249,19 @@ export const actions = {
             }
         }
 
+        const user = await db.query.userTable.findFirst({
+            where: eq(schema.userTable.id, pur.userId)
+        });
+
+        if (!user) {
+            return {
+                Success: false,
+                message: 'Utilisateur introuvable'
+            }
+        }
+
         const updateCredits = await db.update(schema.userTable).set({
-            credits: parseInt(event.locals.user.credits) + (pur.quantity || 0)
+            credits: user.credits + (pur.quantity || 0)
         }).where(eq(schema.userTable.id, pur.userId))
 
         if (!updateCredits.success) {
@@ -209,6 +276,23 @@ export const actions = {
             verifiedBy: event.locals.user.id,
             verifiedAt: Date.now()
         }).where(eq(schema.paymentTable.id, id))
+
+        const sendEmail = await sendStatusNotificationEmail(
+            user.firstName ?? user.username,
+            user.email,
+            'purchase',
+            'approved',
+            `${pur.quantity} crédits`,
+            event.platform?.env.SMTP_API_KEY as string
+        );
+
+        if (!sendEmail) {
+            return {
+                Success: false,
+                message: 'Failed to send email'
+            }
+        }
+
         return {
             Success: updatePur.success===true,
             message: 'Achat vérifié'
@@ -234,6 +318,45 @@ export const actions = {
             verifiedBy: event.locals.user.id,
             verifiedAt: Date.now()
         }).where(eq(schema.paymentTable.id, id))
+
+        const purchase = await db.query.paymentTable.findFirst({
+            where: eq(schema.paymentTable.id, id)
+        });
+
+        if (!purchase) {
+            return {
+                Success: false,
+                message: 'Achat introuvable'
+            }
+        }
+
+        const user = await db.query.userTable.findFirst({
+            where: eq(schema.userTable.id, purchase.userId)
+        });
+
+        if (!user) {
+            return {
+                Success: false,
+                message: 'Utilisateur introuvable'
+            }
+        }
+
+        const sendEmail = await sendStatusNotificationEmail(
+            user.firstName ?? user.username,
+            user.email,
+            'purchase',
+            'rejected',
+            `${purchase.quantity} crédits`,
+            event.platform?.env.SMTP_API_KEY as string
+        );
+
+        if (!sendEmail) {
+            return {
+                Success: false,
+                message: 'Failed to send email'
+            }
+        }
+
         return {
             Success: pur.success===true,
             message: 'Achat vérifié'

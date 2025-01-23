@@ -26,6 +26,12 @@
     $: if (form?.message.includes("transformée")) {
         toBeEditedPublicationStore.set(form.pub as Draft);
         newPublicationStateStore.set(true);
+        toastStore.trigger({
+            message: "Publication chargée",
+            autohide: true,
+            hideDismiss: false,
+            background: 'variant-filled-success'
+        });
         
     }
 

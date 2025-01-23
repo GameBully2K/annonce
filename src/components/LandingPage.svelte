@@ -17,49 +17,49 @@
     ];
 
     const popularForms = [
-        { title: "Constitution de société", href: "/annonce-legale/constitution-societe" },
-        { title: "Modification de société", href: "/annonce-legale/modification-societe" },
-        { title: "Transfert de siège social", href: "/annonce-legale/transfert-siege" },
-        { title: "Changement de dirigeant", href: "/annonce-legale/changement-dirigeant" },
-        { title: "Dissolution", href: "/annonce-legale/dissolution" },
-        { title: "Clôture de la liquidation", href: "/annonce-legale/cloture-liquidation" },
-        { title: "Augmentation de capital", href: "/annonce-legale/augmentation-capital" }
+        { title: "Constitution de société", href: "/login" },
+        { title: "Modification de société", href: "/login" },
+        { title: "Transfert de siège social", href: "/login" },
+        { title: "Changement de dirigeant", href: "/login" },
+        { title: "Dissolution", href: "/login" },
+        { title: "Clôture de la liquidation", href: "/login" },
+        { title: "Augmentation de capital", href: "/login" }
     ];
 
     const legalAnnouncementCategories = [
         {
             title: "Constitution de société",
             items: [
-                { title: "SARL", href: "/annonce-legale/constitution-sarl" },
-                { title: "SARLAU", href: "/annonce-legale/constitution-sarlau" },
-                { title: "SNC", href: "/annonce-legale/constitution-snc" },
-                { title: "SCS", href: "/annonce-legale/constitution-scs" },
-                { title: "SCA", href: "/annonce-legale/constitution-sca" },
-                { title: "SAS", href: "/annonce-legale/constitution-sas" },
-                { title: "SA", href: "/annonce-legale/constitution-sa" },
-                { title: "GIE", href: "/annonce-legale/constitution-gie" }
+                { title: "SARL", href: "/login" },
+                { title: "SARLAU", href: "/login" },
+                { title: "SNC", href: "/login" },
+                { title: "SCS", href: "/login" },
+                { title: "SCA", href: "/login" },
+                { title: "SAS", href: "/login" },
+                { title: "SA", href: "/login" },
+                { title: "GIE", href: "/login" }
             ]
         },
         {
             title: "Modification de société",
             items: [
-                { title: "Changement de dirigeant", href: "/annonce-legale/changement-dirigeant" },
-                { title: "Changement d'objet social", href: "/annonce-legale/changement-objet-social" },
-                { title: "Changement de dénomination", href: "/annonce-legale/changement-denomination" },
-                { title: "Cession de parts sociales", href: "/annonce-legale/cession-parts" },
-                { title: "Réduction de capital", href: "/annonce-legale/reduction-capital" },
-                { title: "Augmentation de capital", href: "/annonce-legale/augmentation-capital" }
+                { title: "Changement de dirigeant", href: "/login" },
+                { title: "Changement d'objet social", href: "/login" },
+                { title: "Changement de dénomination", href: "/login" },
+                { title: "Cession de parts sociales", href: "/login" },
+                { title: "Réduction de capital", href: "/login" },
+                { title: "Augmentation de capital", href: "/login" }
             ]
         },
         {
             title: "Autres modifications",
             items: [
-                { title: "Transfert de siège social", href: "/annonce-legale/transfert-siege" },
-                { title: "Transformation de la forme sociale", href: "/annonce-legale/transformation" },
-                { title: "Dissolution", href: "/annonce-legale/dissolution" },
-                { title: "Clôture de la liquidation", href: "/annonce-legale/cloture-liquidation" },
-                { title: "Cessation d'activité", href: "/annonce-legale/cessation-activite" },
-                { title: "Continuité de l'activité", href: "/annonce-legale/continuite-activite" }
+                { title: "Transfert de siège social", href: "/login" },
+                { title: "Transformation de la forme sociale", href: "/login" },
+                { title: "Dissolution", href: "/login" },
+                { title: "Clôture de la liquidation", href: "/login" },
+                { title: "Cessation d'activité", href: "/login" },
+                { title: "Continuité de l'activité", href: "/login" }
             ]
         }
     ];
@@ -133,15 +133,37 @@
     function toggleVideoModal() {
         showVideoModal = !showVideoModal;
     }
+
+    let showMobileMenu = false;
+    
+    function toggleMobileMenu() {
+        showMobileMenu = !showMobileMenu;
+    }
+
+    function scrollToSection(sectionId: string) {
+        const section = document.getElementById(sectionId);
+        if (section) {
+            toggleMobileMenu();
+            // Add some offset for the fixed header
+            const headerOffset = 100;
+            const elementPosition = section.getBoundingClientRect().top;
+            const offsetPosition = elementPosition + window.pageYOffset - headerOffset;
+
+            window.scrollTo({
+                top: offsetPosition,
+                behavior: "smooth"
+            });
+        }
+    }
 </script>
 
 <div class="landing-page">
     <!-- Header -->
-    <header class="fixed top:10 md:top-11 w-full bg-white/95 backdrop-blur-sm z-50 transition-all duration-300">
+    <header class="fixed mt-10 md:mt-0 top:10 md:top-11 w-full bg-white/95 backdrop-blur-sm z-50 transition-all duration-300">
         <div class="container mx-auto">
             <div class="flex items-center justify-between py-4 px-6">
                 <!-- Logo -->
-                <a href="/" class="flex items-center space-x-2 w-[120px] md:w-[15%]">
+                <a href="/" class="flex items-center space-x-2 w-[200px] md:w-[15%]">
                     <img
                         src="/logo.webp"
                         alt="1000 Annonces" 
@@ -151,28 +173,28 @@
 
                 <!-- Desktop Navigation -->
                 <nav class="hidden md:flex items-center space-x-8">
-                    <a 
-                        href="#services" 
+                    <button 
+                        on:click={() => scrollToSection('services')} 
                         class="text-[#263763] hover:text-[#4E9C97] font-medium transition-all duration-300 relative after:content-[''] after:absolute after:left-0 after:bottom-[-4px] after:h-0.5 after:w-0 after:bg-[#4E9C97] after:transition-all after:duration-300 hover:after:w-full"
                     >
                         Services
-                    </a>
-                    <a 
-                        href="#pricing" 
+                    </button>
+                    <button 
+                        on:click={() => scrollToSection('pricing')} 
                         class="text-[#263763] hover:text-[#4E9C97] font-medium transition-all duration-300 relative after:content-[''] after:absolute after:left-0 after:bottom-[-4px] after:h-0.5 after:w-0 after:bg-[#4E9C97] after:transition-all after:duration-300 hover:after:w-full"
                     >
                         Tarifs
-                    </a>
-                    <a 
-                        href="#about" 
+                    </button>
+                    <button 
+                        on:click={() => scrollToSection('about')} 
                         class="text-[#263763] hover:text-[#4E9C97] font-medium transition-all duration-300 relative after:content-[''] after:absolute after:left-0 after:bottom-[-4px] after:h-0.5 after:w-0 after:bg-[#4E9C97] after:transition-all after:duration-300 hover:after:w-full"
                     >
                         À propos
-                    </a>
+                    </button>
                 </nav>
 
                 <!-- Action Buttons -->
-                <div class="flex items-center space-x-4">
+                <div class="hidden md:flex items-center space-x-4">
                     <button 
                         on:click={toggleContactForm} 
                         class="px-6 py-2 text-[#4E9C97] border-2 border-[#4E9C97] rounded-full font-medium hover:bg-[#4E9C97] hover:text-white transition-all duration-300"
@@ -187,13 +209,63 @@
                     </a>
                 </div>
 
-                <!-- Mobile Menu Button (hidden on desktop) -->
-                <button class="md:hidden p-2 rounded-lg hover:bg-gray-100 transition-colors duration-300">
+                <!-- Update Mobile Menu Button -->
+                <button 
+                    class="md:hidden p-2 rounded-lg hover:bg-gray-100 transition-colors duration-300"
+                    on:click={toggleMobileMenu}
+                >
                     <svg class="w-6 h-6 text-[#263763]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
+                        {#if !showMobileMenu}
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
+                        {:else}
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                        {/if}
                     </svg>
                 </button>
             </div>
+
+            <!-- Add Mobile Menu -->
+            {#if showMobileMenu}
+                <div class="md:hidden bg-white border-t border-gray-100">
+                    <nav class="flex flex-col space-y-4 p-4">
+                        <button 
+                            on:click={() => scrollToSection('services')} 
+                            class="text-left text-[#263763] hover:text-[#4E9C97] font-medium py-2 transition-colors duration-300"
+                        >
+                            Services
+                        </button>
+                        <button 
+                            on:click={() => scrollToSection('pricing')} 
+                            class="text-left text-[#263763] hover:text-[#4E9C97] font-medium py-2 transition-colors duration-300"
+                        >
+                            Tarifs
+                        </button>
+                        <button 
+                            on:click={() => scrollToSection('about')} 
+                            class="text-left text-[#263763] hover:text-[#4E9C97] font-medium py-2 transition-colors duration-300"
+                        >
+                            À propos
+                        </button>
+                        <div class="flex flex-col gap-4 pt-4 border-t border-gray-100">
+                            <button 
+                                on:click={() => {
+                                    toggleMobileMenu();
+                                    toggleContactForm();
+                                }}
+                                class="w-full px-6 py-2 text-[#4E9C97] border-2 border-[#4E9C97] rounded-full font-medium hover:bg-[#4E9C97] hover:text-white transition-all duration-300"
+                            >
+                                Contact
+                            </button>
+                            <a 
+                                href="/login" 
+                                class="w-full px-6 py-2 bg-[#263763] text-white rounded-full font-medium hover:bg-[#4E9C97] text-center transition-all duration-300"
+                            >
+                                Commencer
+                            </a>
+                        </div>
+                    </nav>
+                </div>
+            {/if}
         </div>
 
         <!-- Scroll Progress Bar -->

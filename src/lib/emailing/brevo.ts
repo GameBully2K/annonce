@@ -60,3 +60,82 @@ export async function sendContactFormEmail(name:string, subject:string, email:st
         return false;
     }
 }
+
+export async function sendStatusNotificationEmail(
+    name: string, 
+    email: string, 
+    type: 'purchase' | 'publication',
+    status: 'approved' | 'rejected',
+    itemDetails: string,
+    key: string
+) {
+    const year = new Date().getFullYear();
+    const typeText = type === 'purchase' ? 'achat' : 'publication';
+    const statusText = status === 'approved' ? 'approuvée' : 'rejetée';
+    console.log('Sending status notification email:', name, email, type, status, itemDetails);
+    
+    try {
+        const response = await fetch("https://api.brevo.com/v3/smtp/email", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+                "api-key": key,
+                "accept": "application/json"
+            },
+            body: JSON.stringify({
+                "sender": {
+                    "email": "no-reply@1000-annonces.ma",
+                    "name": "1000-annonces"
+                },
+                "to": [{
+                    "email": email,
+                    "name": name
+                }],
+                "subject": `Statut de votre ${typeText}: ${statusText}`,
+                "htmlContent": `<html lang="fr">
+                    <head>
+                        <meta charset="UTF-8">
+                        <meta name="viewport" content="width=device-width,initial-scale=1">
+                        <title>Notification de Statut</title>
+                        <style>
+                            body{font-family:Arial,sans-serif;font-size:16px;background-color:#f4f4f4;margin:0;padding:0}
+                            .email-container{max-width:600px;margin:40px auto;background:#fff;border:1px solid #ddd}
+                            .email-header{background-color:#263763;color:#fff;padding:20px;text-align:center}
+                            .email-body{padding:20px;text-align:center}
+                            .status{font-size:20px;margin:20px 0;padding:10px;display:inline-block}
+                            .approved{color:#4E9C97}
+                            .rejected{color:#dc3545}
+                            .footer{text-align:center;color:#777;font-size:14px;padding:20px}
+                        </style>
+                    </head>
+                    <body>
+                        <div class="email-container">
+                            <div class="email-header">
+                                <h1>Notification de Statut</h1>
+                            </div>
+                            <div class="email-body">
+                                <p>Bonjour ${name},</p>
+                                <p>Votre ${typeText} a été ${statusText}:</p>
+                                <div class="status ${status}">
+                                    ${itemDetails}
+                                </div>
+                                <p>${status === 'approved' 
+                                    ? 'Merci de votre confiance!' 
+                                    : 'Pour plus d\'informations, veuillez nous contacter.'}</p>
+                                <a href="mailto:Journal.1000ANNONCES@GMAIL.COM" style="color:#4E9C97">
+                                    Journal.1000ANNONCES@GMAIL.COM
+                                </a>
+                            </div>
+                            <div class="footer">&copy; ${year} 1000-annonces. Tous droits réservés.</div>
+                        </div>
+                    </body>
+                </html>`
+            })
+        });
+        console.log('Status notification email response:', response.status);
+        return response.status === 201;
+    } catch (error) {
+        console.error('Failed to send status notification email:', error);
+        return false;
+    }
+}
